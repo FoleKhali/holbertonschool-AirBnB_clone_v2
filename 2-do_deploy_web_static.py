@@ -5,8 +5,24 @@ of the web_static folder of the AirBnB Clone repo
 """
 import os.path
 from fabric.api import *
+from datetime import datetime
 
 env.hosts = ['52.73.0.54', '34.230.19.232']
+
+
+def do_pack():
+    """ function that create a directory and a .tgz archive
+    """
+    try:
+        if not os.path.exists("versions"):
+            local("mkdir versions")
+        date = datetime.now()
+        date = date.strftime("%Y%m%d%H%M%S")
+        name = "versions/web_static_" + date + '.tgz'
+        local('tar -cvzf {} web_static'.format(name))
+        return (name)
+    except:
+        return (None)
 
 
 def do_deploy(archive_path):
