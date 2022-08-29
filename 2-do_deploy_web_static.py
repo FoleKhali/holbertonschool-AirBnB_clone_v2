@@ -1,37 +1,32 @@
 #!/usr/bin/python3
-""" distributes an archive to your web servers,
-using the function do_deploy """
+"""
+Generates a .tgz archive from the contents
+of the web_static folder of the AirBnB Clone repo
+"""
+import os.path
 from fabric.api import *
-import os
 
 env.hosts = ['52.73.0.54', '34.230.19.232']
-env.user = "ubuntu"
-
 
 def do_deploy(archive_path):
-    """ It does deploy in the webserver """
-    if not os.path.exists("archive_path"):
+    """ distributes an archive to a web server """
+    if os.path.exists(archive_path) is False:
         return False
-
     try:
-
-        fil_tgz = os.path.basename(archive_path)
-        fol_des = fil_tgz.replace(".tgz", "")
-        path = "/data/web_static/releases/"
-
-        put(archive_path, "/tmp/")
-
-        run("mkdir -p {}{}/".format(path, fol_des))
-        run("tar -xzf /tmp/{} -C {}{}/".format(fil_tgz, path, fol_des))
-        run("rm /tmp/{}".format(fil_tgz))
-        run("mv {}{}/web_static/* {}{}/".format(path, fol_des, path, fol_des))
-        run("rm -rf {}{}/web_static".format(path, fol_des))
+        path_id = archive_path.split('/')
+        a = path_id[1].split('.')
+        put(archive_path, "/tmp")
+        run("mkdir -p /data/web_static/releases/{}".format(a[0]))
+        run("tar -xzf /tmp/{} -C\
+        /data/web_static/releases/{}".format(path_id[1], a[0]))
+        run("rm /tmp/{}".format(path_id[1]))
+        run("mv /data/web_static/releases/{}/web_static/*\
+        /data/web_static/releases/{}".format(a[0], a[0]))
+        run("rm -rf /data/web_static/releases/{}/web_static".format(a[0]))
         run("rm -rf /data/web_static/current")
-        run("ln -s {}{}/ /data/web_static/current".format(path, fol_des))
-
+        run("ln -s /data/web_static/releases/{}/\
+        /data/web_static/current".format(a[0]))
         print("New version deployed!")
-
         return True
-
     except:
-        return None
+        return False
