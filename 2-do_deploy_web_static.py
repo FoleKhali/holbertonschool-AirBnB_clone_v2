@@ -13,19 +13,17 @@ def do_deploy(archive_path):
     if os.path.exists(archive_path) is False:
         return False
     try:
-        path_id = archive_path.split('/')
-        a = path_id[1].split('.')
-        put(archive_path, "/tmp")
-        run("mkdir -p /data/web_static/releases/{}".format(a[0]))
-        run("tar -xzf /tmp/{} -C\
-        /data/web_static/releases/{}".format(path_id[1], a[0]))
-        run("rm /tmp/{}".format(path_id[1]))
-        run("mv /data/web_static/releases/{}/web_static/*\
-        /data/web_static/releases/{}".format(a[0], a[0]))
-        run("rm -rf /data/web_static/releases/{}/web_static".format(a[0]))
+        path = '/data/web_static/releases/' # agregar esto
+        path_id = archive_path.split('/') # [versions, web_static_20170315003959.tgz]
+        a = path_id[1].split('.') # ---> [web_static_20170315003959, tgz]
+        put(archive_path, "/tmp") # ---> OK
+        run("mkdir -p {}{}".format(path, a[0]))
+        run("tar -xzf /tmp/{} -C {}{}".format(path_id[1], path, a[0]))
+        run("rm /tmp/{}".format(path_id[1])) #  ---> OK
+        run("mv {}{}/web_static/* {}{}".format(path, a[0], path, a[0])) # ---> OK
+        run("rm -rf {}{}/web_static".format(path ,a[0]))
         run("rm -rf /data/web_static/current")
-        run("ln -s /data/web_static/releases/{}/\
-        /data/web_static/current".format(a[0]))
+        run("ln -s {}{}/ /data/web_static/current".format(path ,a[0]))
         print("New version deployed!")
         return True
     except:
