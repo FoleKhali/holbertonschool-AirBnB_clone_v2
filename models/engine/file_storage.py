@@ -64,3 +64,7 @@ class FileStorage:
             key_dict = obj.__class__.__name__ + '.' + obj.id
             if key_dict in self.__objects:
                 del self.__objects[key_dict]
+
+    def close(self):
+        """method to close"""
+        self.reload()
