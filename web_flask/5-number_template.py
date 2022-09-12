@@ -6,19 +6,19 @@ from flask import Flask, render_template
 app = Flask(__name__)
 
 
-@app.route("/")
+@app.route("/", strict_slashes=False)
 def hello_hbnb():
     """ route / will return 'Hello HBNB!' """
     return "Hello HBNB!"
 
 
-@app.route("/hbnb")
+@app.route("/hbnb", strict_slashes=False)
 def hbnb_hbnb():
     """/hbnb route returns HBNB"""
     return "HBNB"
 
 
-@app.route("/c/<text>")
+@app.route("/c/<text>", strict_slashes=False)
 def c_hbnb(text):
     """ dynamically grabs route"""
     if text:
@@ -32,13 +32,13 @@ def python_hbnb(text):
     return "Python {}".format(text.replace("_", " "))
 
 
-@app.route("/number/<int:n>")
+@app.route("/number/<int:n>", strict_slashes=False)
 def number_hbnb(n):
     """ route only numbers """
     return "{:d} is a number".format(n)
 
 
-@app.route("/number_template/<int:n>")
+@app.route("/number_template/<int:n>", strict_slashes=False)
 def number_template_hbnb(n):
     """ path to use flask application take in arguement from path"""
     return render_template("5-number.html", n=n)
