@@ -35,7 +35,8 @@ def python_hbnb(text):
 @app.route("/number/<int:n>")
 def number_hbnb(n):
     """ route only numbers """
-    return "{:d} is a number".format(n)
+    if type(n) == int:
+        return "{} is a number".format(n)
 
 
 @app.route("/number_template/<int:n>")
