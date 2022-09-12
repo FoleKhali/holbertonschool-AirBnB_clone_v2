@@ -1,50 +1,54 @@
 #!/usr/bin/python3
-"""
-this module starts a Flask Web application
-"""
+"""This script starts a Flask web application"""
 from flask import Flask, render_template
+
 app = Flask(__name__)
 
 
-@app.route("/")
-def hello_hbnb():
-    """ route / will return 'Hello HBNB!' """
+@app.route("/", strict_slashes=False)
+def index():
+    """This script starts a Flask web application"""
     return "Hello HBNB!"
 
 
-@app.route("/hbnb")
-def hbnb_hbnb():
-    """/hbnb route returns HBNB"""
+@app.route("/hbnb", strict_slashes=False)
+def hbnb():
+    """Redirects you to the root path"""
     return "HBNB"
 
 
-@app.route("/c/<text>")
-def c_hbnb(text):
-    """ dynamically grabs route"""
-    if text:
-        return "C {}".format(text.replace("_", " "))
+@app.route("/c/<string:text>", strict_slashes=False)
+def c(text):
+    """Redirects you to the c/text route"""
+    if "_" in text:
+        new_text = text.replace("_", " ")
+        return "C {}".format(new_text)
+    return "C {}".format(text)
 
 
-@app.route("/python", defaults={"text": "is cool"}, strict_slashes=False)
-@app.route("/python/<text>")
-def python_hbnb(text):
-    """ route /python/ with text afterwards """
-    return "Python {}".format(text.replace("_", " "))
+@app.route("/python", strict_slashes=False)
+@app.route("/python/<string:text>", strict_slashes=False)
+def python(text="is_cool"):
+    """Redirects you to the python route and python/text"""
+    if "_" in text:
+        new_text = text.replace("_", " ")
+        return "Python {}".format(new_text)
+    return "Python {}".format(text)
 
 
-@app.route("/number/<int:n>")
-def number_hbnb(n):
-    """ route only numbers """
+@app.route("/number/<int:n>", strict_slashes=False)
+def number(n):
+    """Redirects you to the number route and number/n"""
     if type(n) == int:
         return "{} is a number".format(n)
 
 
-@app.route("/number_template/<int:n>")
-def number_template_hbnb(n):
-    """ set arugement from sub DN to html """
-    if type(n) = int:
-        return render_template("5-number.html", n=n)
+@app.route("/number_template/<int:n>", strict_slashes=False)
+def number_template(n):
+    """Redirects you to the number_template route and number_template/n"""
+    if type(n) == int:
+        return render_template("5-number.html", data=n)
 
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port="5000")
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", port=5000)
