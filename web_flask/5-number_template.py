@@ -41,7 +41,8 @@ def number_hbnb(n):
 @app.route("/number_template/<int:n>")
 def number_template_hbnb(n):
     """ set arugement from sub DN to html """
-    return render_template("5-number.html", n=n)
+    if type(n) = int:
+        return render_template("5-number.html", n=n)
 
 
 if __name__ == "__main__":
